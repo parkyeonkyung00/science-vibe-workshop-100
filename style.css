@@ -29,3 +29,5 @@
 #platform-quiz{margin-top:18px;border-top:1px solid #735a97;padding-top:15px}
 
 .hero-title-line{font-size:.72em;line-height:1.35;word-break:keep-all}
+
+.padlet-button{display:inline-block;padding:10px 18px;border:1px solid var(--accent);border-radius:9px;text-decoration:none;font-weight:700}

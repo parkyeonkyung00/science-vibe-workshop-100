@@ -398,6 +398,24 @@ function promptGuidePage() {
 
 pages.splice(10, 0, ['제작 준비', '프롬프트 작성법', '제작 전 안내 · 5분', promptGuidePage]);
 
+const workshopPadlet = 'https://padlet.com/parkav2017/padlet-s0258eav7tg8gkatpfez';
+
+pages.push(['작품 나눔', '내가 만든 웹앱 자랑하기', '나눔 · 패들렛', () => `
+    <p class="lead">내가 만든 웹앱을 공유하고, 동료 선생님의 작품도 열어보세요.</p>
+    <div class="callout">
+        <h2>우리의 웹앱 작품 게시판</h2>
+        <p>아래 버튼을 눌러 패들렛을 새 탭으로 엽니다. 새 게시물에 작품 이름, 접속 주소, 수업 활용 아이디어를 남겨주세요.</p>
+        <a class="primary padlet-button" href="${workshopPadlet}" target="_blank" rel="noopener noreferrer">패들렛에 작품 올리기 ↗</a>
+    </div>
+    <div class="grid">
+        <div class="card"><span class="num">01</span><h3>작품 이름</h3><p>무엇을 만든 앱인지 한 줄로 소개합니다.</p></div>
+        <div class="card"><span class="num">02</span><h3>웹앱 접속 주소</h3><p>동료가 열어볼 수 있는 배포 주소를 붙여넣습니다.</p></div>
+        <div class="card"><span class="num">03</span><h3>수업 활용 아이디어</h3><p>어느 단원에서 학생이 어떤 활동을 할지 한 문장으로 적습니다.</p></div>
+    </div>
+    <p>동료 작품 하나를 열어보고, 수업에 적용해 보고 싶은 점을 댓글로 남겨주세요.</p>
+`]);
+
+
 if(!localStorage.getItem('science-rally-v2')){let old=Number(localStorage.getItem('science-current')||0);if(old>=13)localStorage.setItem('science-current',old+2);let c=JSON.parse(localStorage.getItem('science-completed')||'[]');localStorage.setItem('science-completed',JSON.stringify(c.map(i=>i>=13?i+2:i)));localStorage.setItem('science-rally-v2','1')}
 if (!localStorage.getItem('science-prompt-guide-v1')) {
     const previous = Number(localStorage.getItem('science-current') || 0);
