@@ -35,3 +35,8 @@
 .connection-photo{max-width:560px;margin:20px 0}
 .connection-photo img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:white}
 .connection-photo figcaption{margin-top:7px;color:var(--muted);font-size:13px}
+
+.release-setup label{display:block;margin:8px 0 4px}
+.release-setup select,.release-setup input{display:block;width:100%;max-width:400px;min-height:44px;padding:8px 12px;border:1px solid var(--accent);border-radius:8px;background:white;color:var(--ink);font:inherit}
+.release-setup select:focus-visible,.release-setup input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#release-error{color:#962429;font-weight:600}

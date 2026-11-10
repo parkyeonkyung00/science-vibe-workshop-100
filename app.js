@@ -44,17 +44,21 @@ const revisePrompt=`지금 만든 태양계 게임에서 다음 사항만 수정
 4. 우주선이 문제 하나당 한 번만 전진하는지 확인해 주세요.
 5. 다시 시작하면 점수와 진행도가 0으로 돌아오는지 검사해 주세요.
 수정한 파일을 실행하고, 제가 직접 확인할 항목 3개만 알려주세요.`;
-const savePrompt=`현재 완성한 태양계 학습·우주선 레이스 웹앱을 연결된 GitHub에 저장하고 싶습니다.
-먼저 GitHub 연결과 쓰기 작업 가능 여부를 확인해 주세요. 가능하면 제 개인 계정에 science-race-workshop이라는 새 저장소를 만들어 주세요. 같은 이름이 이미 있으면 덮어쓰지 말고 다른 이름을 제안해 주세요. 비공개 저장소를 우선 사용하세요.
-저장할 내용은 index.html과 실행 방법을 한국어로 적은 README.md입니다. 비밀번호·토큰·학생 개인정보는 넣지 마세요. 기존의 다른 저장소는 수정하지 마세요.
-필요한 승인 화면이 나오면 제가 확인할 대상과 작업을 쉽게 설명해 주세요. 완료되면 실제 저장소 주소와 저장한 파일 목록을 알려주세요.
-현재 도구가 읽기만 가능하거나 새 저장소 생성·쓰기 작업을 지원하지 않으면 저장했다고 말하지 마세요. 대신 index.html을 내려받게 하고, GitHub 웹사이트에서 새 저장소를 만들어 파일을 올리는 방법을 한 단계씩 안내해 주세요.`;
-const deployPrompt=`연결된 Vercel로 방금 만든 science-race-workshop 저장소의 웹앱을 배포하고 싶습니다.
-먼저 Vercel 연결 상태, 접근 가능한 계정 또는 팀, GitHub 저장소 접근 가능 여부를 확인하세요. 기존 프로젝트를 덮어쓰지 말고 새 프로젝트로 진행하세요. 팀이 여러 개이면 어느 팀인지 먼저 물어봐 주세요.
-index.html 하나로 실행되는 정적 웹앱이며 서버, 데이터베이스, 유료 기능, AI API는 필요하지 않습니다. 루트의 index.html이 첫 화면으로 열리도록 설정하세요. 빌드 명령이 필요 없는 구조입니다.
-배포 도구가 지원하는 범위에서 실제로 배포하고 완료 상태를 확인해 주세요. 실패하면 오류를 읽고 수정 가능한 부분만 고쳐 주세요. 배포하지 못했다면 성공했다고 말하거나 주소를 만들지 마세요.
-완료되면 실제 접속 주소를 알려주세요. 학생이 로그인 없이 열 수 있는지도 확인하고, 확인하지 못한 경우에는 제가 시크릿 창에서 검사하도록 알려주세요. 접근 제한을 바꿔야 한다면 바꿀 내용을 먼저 설명해 주세요.
-현재 도구에서 배포를 실행할 수 없다면 Vercel 웹사이트에서 GitHub 저장소를 가져와 배포하는 방법을 한 단계씩 안내해 주세요.`;
+function makeSavePrompt(app, repo) {
+    return `현재 대화에서 완성한 ${app}을 제 GitHub 개인 계정에 저장해 주세요.
+저장소 이름은 ${repo}입니다. 먼저 GitHub 연결과 쓰기 가능 여부를 확인해 주세요. 이 작품용으로 이미 만든 저장소가 있다면 제게 실제 주소를 확인한 뒤 사용해 주세요. 새로 만든다면 비공개로 만들고, 같은 이름으로 다른 작품이 있다면 다른 이름을 제안해 주세요. 기존 파일을 덮어쓰기 전에는 제게 확인해 주세요.
+저장할 파일은 실행 파일 index.html과 한국어 사용법을 담은 README.md입니다. 비밀번호·토큰·학생 개인정보는 넣지 마세요. 완료되면 실제 저장소 주소와 저장한 파일 목록을 알려주세요.
+직접 저장할 수 없다면 index.html을 내려받게 하고, GitHub에서 파일을 올리는 방법을 한 단계씩 안내해 주세요.`;
+}
+
+function makeDeployPrompt(app, repo) {
+    return `현재 대화에서 완성한 ${app}을 Vercel로 배포해 주세요. GitHub 저장소 이름은 ${repo}입니다.
+앞 단계에서 확인한 실제 GitHub 저장소 주소를 사용해 주세요. 주소가 없거나 같은 이름의 저장소가 여럿이면 어느 저장소인지 제게 먼저 확인해 주세요.
+Vercel 연결과 저장소 접근 여부를 확인한 뒤 새 프로젝트로 진행해 주세요. 팀이 여러 개이면 제게 확인하고, 기존 프로젝트는 덮어쓰지 마세요.
+저장소 첫 화면의 index.html이 열리도록 설정해 주세요. 이 실습 파일은 서버나 별도 빌드 명령 없이 실행됩니다.
+배포할 수 있다면 완료 상태와 실제 접속 주소를 확인해 주세요. 학생이 로그인 없이 열 수 있는지 확인하기 어렵다면 시크릿 창에서 검사하도록 알려주세요.
+직접 배포할 수 없다면 Vercel에서 그 GitHub 저장소를 가져와 배포하는 방법을 한 단계씩 안내해 주세요.`;
+}
 const customPrompt=`현재 게임의 구조와 동작은 유지하고 학습 내용을 바꾸고 싶습니다.
 대상 학년: [중학교 몇 학년]
 단원: [단원 이름]
@@ -72,7 +76,7 @@ const helpPrompt=`저는 코딩을 모릅니다. 현재 웹앱에서 문제가 �
 첨부: 문제가 나온 화면 사진
 원인을 확인하고 현재 파일을 수정해 주세요. 정상인 다른 기능은 유지하세요. 수정 후 같은 동작을 다시 검사하고, 제가 할 다음 행동 하나만 알려주세요.`;
 const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const prompts={creationPrompt,revisePrompt,savePrompt,deployPrompt,customPrompt,helpPrompt};
+const prompts={creationPrompt,revisePrompt,customPrompt,helpPrompt};
 const prompt=(id,title)=>`<div class="prompt"><header><b>${title}</b><button onclick="copyPrompt('${id}',this)">요청문 전체 복사</button></header><pre>${esc(prompts[id])}</pre></div>`;
 const steps=a=>`<ol class="instructions">${a.map(x=>`<li><div>${x}</div></li>`).join('')}</ol>`;
 const ok=t=>`<div class="success">✓ 완료 확인 · ${t}</div>`;
@@ -141,7 +145,8 @@ raceTabs.forEach(({ prompt: body }, i) => {
         '두 컴퓨터 상대는 각각 다른 트랙에서 학생이 답을 고를 때만 조금씩 전진한다. 7문제 이상 맞히면 이길 수 있게 속도를 맞춰 줘. 두 문제 연속 정답이면 부스터가 자동으로 발동해 추가로 전진하고 충전은 0으로 돌아가게 해 줘. 오답이면 충전을 초기화하고, 문제를 읽는 동안은 모든 캐릭터를 멈춰 줘. 현재 순위와 부스터 충전 상태를 보여 줘.'
     );
 });
-let selectedRace = 0;
+let selectedRace = Number(localStorage.getItem('workshop-race-tab') || 0);
+if (!raceTabs[selectedRace]) selectedRace = 0;
 
 function raceTabPanel() {
     const { title } = raceTabs[selectedRace];
@@ -160,6 +165,7 @@ function raceWorkshop() {
 
 function selectRace(i) {
     selectedRace = i;
+    localStorage.setItem('workshop-race-tab', String(i));
     document.querySelectorAll('.race-tabs [role="tab"]').forEach((tab, index) => {
         tab.setAttribute('aria-selected', String(index === i));
         tab.tabIndex = index === i ? 0 : -1;
@@ -277,10 +283,77 @@ function phoneVerificationGuide() {
         <p>인증을 마치면 연결 화면으로 돌아갑니다. 전화번호와 인증번호는 ChatGPT 대화창에 올리지 마세요.</p></details>`;
 }
 
+const releaseOptions = [
+    { name: '교과 선택 / 직접 만든 웹앱', app: '수업용 웹앱', repo: 'classroom-web-app' },
+    { name: '태양계 예시', app: '태양계 우주선 레이스 웹앱', repo: 'science-race-workshop' },
+    ...subjectRaces.map(({ name }, i) => ({
+        name,
+        app: name + ' 수업용 웹앱',
+        repo: ['korean-paperboat-race', 'english-verb-race', 'math-number-race',
+            'world-climate-race', 'science-state-race', 'art-color-race', 'music-note-race',
+            'pe-fitness-race', 'nutrition-bike-race', 'ethics-hiking-race'][i]
+    })),
+    { name: '프로그램 2 · 퀴즈 랠리', app: '수업용 퀴즈 랠리 웹앱', repo: 'classroom-quiz-rally' }
+];
+
+function releaseIndex() {
+    const saved = localStorage.getItem('workshop-release-choice');
+    const index = saved === null ? (localStorage.getItem('workshop-race-tab') === null ? 0 : selectedRace + 1) : Number(saved);
+    return releaseOptions[index] ? index : 0;
+}
+
+function updateReleasePrompts(index, repo) {
+    const { app } = releaseOptions[index];
+    prompts.savePrompt = makeSavePrompt(app, repo);
+    prompts.deployPrompt = makeDeployPrompt(app, repo);
+}
+
+function releaseSetup(promptId, title) {
+    const index = releaseIndex();
+    const repo = localStorage.getItem('workshop-release-repo-' + index) || releaseOptions[index].repo;
+    updateReleasePrompts(index, repo);
+    return `
+        <div class="callout release-setup">
+            <label for="release-course"><b>1. 내가 만든 앱의 교과 또는 예시 선택</b></label>
+            <select id="release-course" onchange="changeReleaseCourse(this.value)">
+                ${releaseOptions.map(({ name }, i) => `<option value="${i}" ${i === index ? 'selected' : ''}>${name}</option>`).join('')}
+            </select>
+            <label for="release-repo"><b>2. GitHub 저장소 이름 확인</b></label>
+            <input id="release-repo" type="text" value="${esc(repo)}" maxlength="100" spellcheck="false"
+                autocapitalize="off" autocomplete="off" aria-describedby="release-note release-error"
+                oninput="changeReleaseRepo(this, '${promptId}')">
+            <p id="release-note" class="caption">처음 저장할 때는 제안된 이름을 써도 됩니다. 이미 저장했다면 GitHub에 실제로 표시된 이름을 입력하세요. 17·18페이지에서 같은 이름을 사용합니다.</p>
+            <p id="release-error" role="status" hidden>저장소 이름을 영문, 숫자, 하이픈(-), 밑줄(_), 마침표(.)로 입력하세요.</p>
+        </div>
+        <div id="release-prompt">${prompt(promptId, title)}</div>`;
+}
+
+function changeReleaseCourse(value) {
+    localStorage.setItem('workshop-release-choice', value);
+    render();
+    document.querySelector('#release-course').focus();
+}
+
+function changeReleaseRepo(input, promptId) {
+    const repo = input.value.trim();
+    const valid = /^[a-z0-9_.-]{1,100}$/i.test(repo) && repo !== '.' && repo !== '..';
+    input.setAttribute('aria-invalid', String(!valid));
+    document.querySelector('#release-error').hidden = valid;
+    document.querySelector('#release-prompt button').disabled = !valid;
+    if (valid) {
+        const index = releaseIndex();
+        localStorage.setItem('workshop-release-repo-' + index, repo);
+        updateReleasePrompts(index, repo);
+        document.querySelector('#release-prompt pre').textContent = prompts[promptId];
+    }
+}
+
+updateReleasePrompts(releaseIndex(), localStorage.getItem('workshop-release-repo-' + releaseIndex()) || releaseOptions[releaseIndex()].repo);
+
 function githubSaveGuide() {
     return `
-        <p class="lead">게임 파일을 GitHub에 올립니다. 예시 사진의 저장소 이름은 <b>world-climate-race</b>입니다. 실습에서는 선생님이 만든 저장소 이름을 사용하세요.</p>
-        ${prompt('savePrompt', '④ GitHub 저장 요청문')}
+        <p class="lead">내 교과 웹앱을 GitHub에 저장합니다. 교과를 고르고 저장소 이름을 확인하면 아래 요청문이 바뀝니다. 사진은 사회 교과 실습 예시입니다.</p>
+        ${releaseSetup('savePrompt', '④ GitHub 저장 요청문')}
         <p>위 요청문을 게임을 만든 대화에 붙여넣습니다. 이미 저장소를 만들었다면 같은 저장소를 사용한다고 알려주세요. 직접 진행하라는 안내가 나오면 아래 순서로 따라 하세요.</p>
         <details open><summary>1. 저장소 만들기 또는 기존 저장소 열기</summary>
             ${connectionPhoto('repo-create', 'GitHub 새 저장소 화면. 저장소 이름을 입력하는 칸입니다')}
@@ -308,7 +381,7 @@ function githubSaveGuide() {
 
 function vercelDeployGuide() {
     return `
-        ${prompt('deployPrompt', '⑤ Vercel 배포 요청문')}
+        ${releaseSetup('deployPrompt', '⑤ Vercel 배포 요청문')}
         <p>게임을 만든 대화에 위 요청문을 붙여넣습니다. 직접 진행하라는 안내가 나오면 ${link('https://vercel.com/new', 'Vercel 새 프로젝트')}를 열고 아래 순서로 따라 하세요.</p>
         <div class="callout"><b>두 연결의 역할</b><br>ChatGPT의 Vercel 플러그인은 대화에서 Vercel을 사용하는 데 쓰입니다. <b>Vercel에 GitHub 저장소를 가져오려면</b> Vercel이 그 저장소를 읽을 수 있도록 GitHub에서도 권한을 확인해야 합니다.</div>
         <details open><summary>1. GitHub 저장소 가져오기</summary>
@@ -430,7 +503,7 @@ const pages=[
 ['프로그램 1','우주선 레이스를 만듭니다','실습 · 20분',()=>`<p class="lead">내 교과 탭을 고르고, 완성된 프롬프트를 ChatGPT 새 채팅에 붙여넣으세요.</p>${steps(['아래에서 <b>내 교과 탭</b>을 선택합니다.','<b>요청문 전체 복사</b>를 누른 뒤 ChatGPT 새 채팅에 붙여넣고 전송합니다.','미리보기 또는 만들어진 index.html을 열어 직접 한 판 해 봅니다.','ChatGPT가 제시한 문항·정답·해설을 검토합니다.'])}<button class="primary" onclick="startDemo()">점프! 태양계 탐험대 먼저 체험하기 →</button>${raceWorkshop()}<p>다른 단원으로 바꾸려면 붙여넣은 프롬프트의 <b>[문제로 낼 개념]</b>과 첫 줄의 학년·단원 이름을 수정하세요.</p><div class="callout">오늘 만드는 것은 <b>내 화면에서 혼자 하는 레이스</b>입니다. 정답을 맞히면 전진합니다. 실시간 학생 순위·모둠방·아이템 공격은 이번 실습에 넣지 않습니다.</div>${ok('학습 화면과 레이스가 실제로 실행됩니다.')}${tip('코드 글자만 나왔어요','“코드 설명 대신 실행할 수 있는 index.html 파일로 제공해 주세요. 가능한 환경이면 미리보기를 열어 주세요.”라고 요청하세요. 파일만 받았다면 내려받아 브라우저로 열 수 있습니다.')}`],
 ['프로그램 1','클릭해 보며, 다섯 가지만 확인합니다','실행 확인 · 5분',()=>`<div class="grid"><div class="card"><span class="num">CHECK 01</span><h3>학습 → 출발</h3><p>개념 카드가 보이고 시작 버튼으로 이동하나요?</p></div><div class="card"><span class="num">CHECK 02</span><h3>정답 → 전진</h3><p>한 문항을 맞힐 때 한 번만 이동하고, 연속 두 문항을 맞히면 부스터가 켜지나요?</p></div><div class="card"><span class="num">CHECK 03</span><h3>오답 → 다시 도전</h3><p>해설이 나오고 같은 문제를 다시 풀 수 있나요?</p></div></div>${steps(['다섯 문제를 끝까지 풉니다. 한 번은 일부러 틀려 보세요.','결과 화면에서 <b>첫 시도 정답 수</b>가 맞는지 확인합니다.','다시 하기를 누르면 <b>진행도와 점수가 0으로 초기화</b>되는지 확인합니다.'])}<div class="callout"><b>내용 확인도 교사의 역할입니다.</b> 정답이 하나인지, 해설이 정확한지, 그림이 실제 크기·거리 비율이라는 오해를 주지 않는지 확인하세요.</div>${ok('정답·오답·결과·재시작을 직접 확인했습니다. 문제가 있으면 도움 단계의 요청문을 사용합니다.')}`],
 ['프로그램 1','한 번에 하나씩, 말로 고칩니다','수정 · 10분',()=>`<p class="lead">“더 좋게 해 줘”보다, 바꿀 대상과 원하는 모습을 정확히 말하면 쉽습니다.</p>${prompt('revisePrompt','② 읽기와 동작을 다듬는 요청문')}${prompt('customPrompt','③ 다른 단원으로 바꾸는 요청문')}<div class="callout">오늘은 먼저 <b>제목·색상·문제 중 하나만</b> 바꿔보세요. 다른 단원으로 바꿀 때는 대괄호 [ ] 안을 채우고, 문항을 검토한 후 반영합니다.</div>${ok('내가 요청한 수정이 화면에 반영되었습니다.')}`],
-['저장하기','게임 파일을 GitHub에 보관합니다','저장 · 8분',githubSaveGuide],
+['저장하기','내 교과 웹앱을 GitHub에 저장합니다','저장 · 8분',githubSaveGuide],
 ['공유하기','Vercel로 접속 주소를 만듭니다','배포 · 12분',vercelDeployGuide],
 ['마무리','수업에 넣을 장면을 정합니다','나눔 · 5분',()=>`<h1>이제, 내 수업의 도구입니다.</h1><p class="lead">완성도보다 중요한 것은 학생이 무엇을 배우고, 교사가 무엇을 확인할 수 있는지입니다.</p>${steps(['옆 선생님에게 게임 주소를 공유하고 서로 한 번 실행합니다.','“어떤 단원의 어느 장면에서 쓸 것인가?”를 한 문장으로 설명합니다.','“게임 결과를 보고 무엇을 다시 가르칠 것인가?”를 정합니다.'])}<div class="grid"><div class="card"><h3>수업 전</h3><p>선수 개념을 확인하는 짧은 진단</p></div><div class="card"><h3>수업 중</h3><p>개념 학습 뒤 즉시 확인하는 연습</p></div><div class="card"><h3>수업 후</h3><p>틀린 문제를 다시 설명하는 복습</p></div></div><div class="callout">다음 작품도 같은 순서입니다.<br><b>배울 내용 정하기 → 구체적으로 부탁하기 → 실행하기 → 교사가 검토하기 → 고치기 → 공유하기</b></div><button onclick="downloadPrompts()">실습 요청문 모음 내려받기</button>`],
 ['도움','막혔을 때는 이곳으로 오세요','언제든 사용',()=>`<p class="lead">버튼을 여러 번 누르기보다, 지금 화면과 하고 싶은 행동을 함께 알려주세요.</p><div class="callout"><b>내 화면과 같은 상황을 고르세요.</b><p><button type="button" onclick="openWorkshopHelp('저장하기', 'github-file-name')">파일에 (2)가 붙었어요</button> <button type="button" onclick="openWorkshopHelp('공유하기', 'repo-not-listed')">Vercel에 저장소가 없어요</button> <button type="button" onclick="openWorkshopHelp('공유하기', 'deploy-not-found')">배포 완료인데 404가 떠요</button></p></div>${prompt('helpPrompt','문제가 생겼을 때 복사하는 요청문')}${tip('GitHub가 검색되지 않아요','설정의 검색창과 새 도구 목록의 검색창은 다릅니다. ‘디렉터리 둘러보기’ 또는 도구 목록 바로가기로 이동한 뒤 검색하세요.')}${tip('저장 또는 배포가 완료됐다고 하는데 주소가 없어요','실제 저장소 주소·파일 목록·배포 완료 상태를 요청하세요. 주소를 추측해서 쓰지 마세요. 도구가 지원하지 않는다면 저장·배포 단계의 직접 진행 경로를 사용합니다.')}${tip('화면이 안내와 달라요','이 자료는 제공된 ChatGPT Work 화면을 바탕으로 합니다. 일반 ChatGPT·조직 계정·업데이트에 따라 다를 수 있습니다. 현재 화면을 캡처해 강사에게 보여주세요. 비밀번호·인증번호·토큰은 가리세요.')}${tip('시간 안에 배포까지 못 했어요','게임 파일을 먼저 내려받아 보관하고, 저장·배포 단계는 연수 후 이어서 진행하세요. 강사는 참가자가 만든 파일이 실제 실행되는지 먼저 확인합니다.')}<p>${link('https://chatgpt.com/plugins','도구 목록 열기')} · ${link('https://github.com/','GitHub 열기')} · ${link('https://vercel.com/','Vercel 열기')}</p><p class="caption">화면 안내 기준: 2026년 11월 제공된 화면. 재구성 화면은 실제 로그인 버튼이 아닙니다. 도구의 지원 범위는 계정과 실행 환경에서 확인해야 합니다.</p>`]
@@ -490,7 +563,7 @@ const rallyMotionPrompt=`현재 프로그램 2의 학습 내용·정답·점수 
 prompts.rallyPrompt=rallyPrompt;prompts.rallyMotionPrompt=rallyMotionPrompt;
 pages.splice(13,0,
 ['프로그램 2','직접 달리는 퀴즈 랠리를 만듭니다','선택 실습 · 20분',()=>`<p class="lead">프로그램 1은 정답을 맞히면 전진하는 게임입니다. 프로그램 2는 <b>직접 이동·점프·대시하며 문제 상자를 만나는 장애물 경주</b>입니다.</p><p>${link('https://scilab-platform.vercel.app/run/quiz-rally','참고 장애물레이스 체험하기')}</p><table><tr><th>구분</th><th>프로그램 1</th><th>프로그램 2</th></tr><tr><td>핵심 행동</td><td>문제를 맞히면 우주선 전진</td><td>로봇을 직접 조작하고 문제 상자 열기</td></tr><tr><td>입력</td><td>선택지 버튼</td><td>방향키·점프·대시, 화면 버튼</td></tr><tr><td>학습 확인</td><td>5문항과 해설</td><td>5문항과 해설 + 에너지 보상</td></tr><tr><td>권장 진행</td><td>처음 만드는 분의 기본 실습</td><td>같은 제작 시간에 선택하거나 연수 후 확장</td></tr></table><div class="callout"><b>100분에 두 작품을 모두 완성할 필요는 없습니다.</b> 프로그램 1·2 중 하나를 골라 제작하고 공통 저장·배포 단계로 이동합니다. 프로그램 1을 이미 완성했다면 별도 대화에서 프로그램 2를 시작하세요.</div>${steps(['참고 게임에서 이동·점프와 문제 상자의 역할을 살펴봅니다.','ChatGPT의 <b>새 대화</b>를 열고 아래 요청문을 복사해 입력합니다.','프로그램 1과 다른 폴더에 저장하도록 확인하고 실제 실행 파일을 받습니다.'])}${prompt('rallyPrompt','프로그램 2 · 로봇 퀴즈 랠리 제작 요청문')}<div class="callout">참고 사례의 수업 코드·실시간 모둠 경기·교사 관제실은 확장 기능입니다. 이번 제작은 <b>1인용으로 조작과 학습을 먼저 완성</b>합니다.</div>${ok('로봇이 움직이고 문제 상자에서 퀴즈가 열립니다.')}`],
-['프로그램 2','달리기와 퀴즈가 함께 작동하나요?','확인·수정 · 10분',()=>`${steps(['좌우 이동·점프·대시를 해 봅니다. 에너지가 없어도 기본 이동으로 진행되는지 확인합니다.','문제 창을 열고 <b>로봇과 시간이 멈추는지</b> 확인합니다.','일부러 틀린 뒤 다시 풀어 봅니다. 정답 보상을 같은 상자에서 여러 번 받지 않는지 확인합니다.','다섯 문제를 해결한 뒤 결승선을 통과합니다. 첫 시도 정답 수와 오답 해설을 확인합니다.','다시 달리기를 눌러 점수·상자·위치가 초기화되는지 확인합니다. 다른 탭에 다녀와도 일시정지되나요?'])}${prompt('rallyMotionPrompt','프로그램 2 · 생동감과 조작을 다듬는 요청문')}${tip('캐릭터가 멈추지 않거나 지형에 끼어요','문제가 발생한 화면을 첨부하고 “입력 상태 초기화와 충돌 판정을 확인하고, 안전 지점으로 돌아가는 기능을 고쳐 주세요”라고 요청하세요.')}<div class="callout"><b>완성했다면 공통 저장·배포 단계로 이동하세요.</b><br>아래 저장 요청문에서 저장소 이름을 <b>science-quiz-rally</b>로 바꿉니다. 배포할 때도 이 저장소를 선택해야 프로그램 1을 덮어쓰지 않습니다.</div>${ok('이동·퀴즈·보상·완주·재시작을 직접 확인했습니다.')}`]
+['프로그램 2','달리기와 퀴즈가 함께 작동하나요?','확인·수정 · 10분',()=>`${steps(['좌우 이동·점프·대시를 해 봅니다. 에너지가 없어도 기본 이동으로 진행되는지 확인합니다.','문제 창을 열고 <b>로봇과 시간이 멈추는지</b> 확인합니다.','일부러 틀린 뒤 다시 풀어 봅니다. 정답 보상을 같은 상자에서 여러 번 받지 않는지 확인합니다.','다섯 문제를 해결한 뒤 결승선을 통과합니다. 첫 시도 정답 수와 오답 해설을 확인합니다.','다시 달리기를 눌러 점수·상자·위치가 초기화되는지 확인합니다. 다른 탭에 다녀와도 일시정지되나요?'])}${prompt('rallyMotionPrompt','프로그램 2 · 생동감과 조작을 다듬는 요청문')}${tip('캐릭터가 멈추지 않거나 지형에 끼어요','문제가 발생한 화면을 첨부하고 “입력 상태 초기화와 충돌 판정을 확인하고, 안전 지점으로 돌아가는 기능을 고쳐 주세요”라고 요청하세요.')}<div class="callout"><b>완성했다면 공통 저장·배포 단계로 이동하세요.</b><br>17페이지에서 <b>프로그램 2 · 퀴즈 랠리</b>를 선택하고, 18페이지에서도 같은 저장소를 사용합니다.</div>${ok('이동·퀴즈·보상·완주·재시작을 직접 확인했습니다.')}`]
 );
 
 Object.assign(prompts, {
