@@ -277,6 +277,85 @@ function phoneVerificationGuide() {
         <p>인증을 마치면 연결 화면으로 돌아갑니다. 전화번호와 인증번호는 ChatGPT 대화창에 올리지 마세요.</p></details>`;
 }
 
+function githubSaveGuide() {
+    return `
+        <p class="lead">게임 파일을 GitHub에 올립니다. 예시 사진의 저장소 이름은 <b>world-climate-race</b>입니다. 실습에서는 선생님이 만든 저장소 이름을 사용하세요.</p>
+        ${prompt('savePrompt', '④ GitHub 저장 요청문')}
+        <p>위 요청문을 게임을 만든 대화에 붙여넣습니다. 이미 저장소를 만들었다면 같은 저장소를 사용한다고 알려주세요. 직접 진행하라는 안내가 나오면 아래 순서로 따라 하세요.</p>
+        <details open><summary>1. 저장소 만들기 또는 기존 저장소 열기</summary>
+            ${connectionPhoto('repo-create', 'GitHub 새 저장소 화면. 저장소 이름을 입력하는 칸입니다')}
+            ${steps([
+                '처음이라면 ' + link('https://github.com/new', '새 저장소 만들기') + '를 열고 저장소 이름을 입력합니다. 이미 연수용 저장소가 있으면 그 저장소를 엽니다.',
+                '공개 범위에서 <b>Private(비공개)</b>를 선택합니다. <b>README 파일 추가</b>를 켜면 생성 후 파일 목록과 Add file 메뉴가 나타납니다.',
+                '화면 맨 아래 <b>Create repository(저장소 만들기)</b>를 누릅니다.'
+            ])}
+        </details>
+        <details><summary>2. ‘빠른 설정’만 보이면 파일 업로드 링크 찾기</summary>
+            ${connectionPhoto('repo-empty', '빈 저장소의 빠른 설정 상자. 기존 파일을 업로드하는 링크가 있습니다')}
+            <p>파일이 없는 새 저장소에서는 파란색 <b>빠른 설정(Quick setup)</b> 상자 안의 <b>기존 파일 업로드(uploading an existing file)</b>를 누르세요. 파일 목록이 보이는 저장소에서는 <b>Add file → Upload files</b>를 누릅니다.</p>
+        </details>
+        <details id="github-file-name"><summary>3. 파일 이름을 확인하고 저장하기</summary>
+            ${connectionPhoto('repo-filename', '업로드 목록에 index (2).html이 올라온 예시. 저장하기 전에 파일 이름을 확인합니다')}
+            ${steps([
+                '게임 파일을 내려받아 컴퓨터에서 이름을 정확히 <b>index.html</b>로 맞춥니다. <b>index (2).html</b>처럼 숫자가 붙거나 <b>index.html.html</b>처럼 확장자가 두 번 붙었는지 확인합니다.',
+                '위 사진처럼 잘못된 파일이 아직 업로드 목록에 있으면, 그 줄 오른쪽 <b>×</b>를 누르고 이름을 고친 파일을 다시 올립니다.',
+                '<b>Commit changes(변경 사항 저장)</b>를 누릅니다. 저장소 첫 화면으로 돌아가 파일 목록에 <b>index.html</b>이 보이는지 확인합니다.'
+            ])}
+            <p>이미 잘못된 이름으로 저장했다면 GitHub에서 그 파일을 열고 <b>연필 버튼 → 파일 이름을 index.html로 수정 → Commit changes</b> 순서로 고칠 수 있습니다. 기존에 <b>index.html</b>이 있다면 어느 쪽이 최신 게임 파일인지 먼저 확인하세요.</p>
+        </details>
+        ${ok('GitHub 저장소 첫 화면의 파일 목록에 index.html이 보입니다.')}`;
+}
+
+function vercelDeployGuide() {
+    return `
+        ${prompt('deployPrompt', '⑤ Vercel 배포 요청문')}
+        <p>게임을 만든 대화에 위 요청문을 붙여넣습니다. 직접 진행하라는 안내가 나오면 ${link('https://vercel.com/new', 'Vercel 새 프로젝트')}를 열고 아래 순서로 따라 하세요.</p>
+        <div class="callout"><b>두 연결의 역할</b><br>ChatGPT의 Vercel 플러그인은 대화에서 Vercel을 사용하는 데 쓰입니다. <b>Vercel에 GitHub 저장소를 가져오려면</b> Vercel이 그 저장소를 읽을 수 있도록 GitHub에서도 권한을 확인해야 합니다.</div>
+        <details open><summary>1. GitHub 저장소 가져오기</summary>
+            <p><b>Git 저장소 가져오기(Import Git Repository)</b>에서 내 GitHub 계정과 저장소 이름을 확인합니다. <b>Connect GitHub</b>가 보이면 안내에 따라 내 계정을 연결합니다. 저장소가 목록에 나타나면 그 줄의 <b>수입(Import)</b>을 누릅니다.</p>
+        </details>
+        <details id="repo-not-listed"><summary>저장소가 목록에 없어요</summary>
+            ${connectionPhoto('repo-missing', 'Vercel에 예전 저장소만 보이는 화면. 아래의 GitHub 앱 권한 조정을 누릅니다')}
+            ${steps([
+                '목록 아래 <b>GitHub 앱 권한 조정</b>을 누릅니다. 영어 화면에서는 <b>Adjust GitHub App Permissions</b> 또는 <b>Configure GitHub App</b>으로 표시됩니다.',
+                'GitHub에 아래와 같은 <b>Vercel 앱 설정</b> 화면이 열리면, 내 계정인지 확인하고 아래로 내려 <b>Repository access(저장소 액세스)</b>를 찾습니다.'
+            ])}
+            ${connectionPhoto('repo-permissions', 'GitHub의 Vercel 앱 설정 화면 상단. 아래로 내려 저장소 액세스를 찾습니다')}
+            <p><b>Only select repositories(선택한 저장소만)</b>에서 이번 실습 저장소를 추가하고 <b>Save(저장)</b>를 누릅니다. 기존에 허용된 저장소는 목록에 둡니다. Vercel 탭으로 돌아가 새로고침한 뒤 다시 검색하고 <b>Import</b>를 누릅니다.</p>
+            <p>그래도 안 보이면 GitHub에서 실제로 만든 저장소 주소를 열어 <b>소유자와 저장소 이름</b>을 확인하고, Vercel에서 선택한 GitHub 계정과 대조하세요.</p>
+        </details>
+        <details><summary>2. 새 프로젝트 설정 후 배포하기</summary>
+            ${connectionPhoto('deploy-settings', 'Vercel의 새 프로젝트 화면. 루트 디렉터리, Other, 배포 버튼을 확인합니다')}
+            ${steps([
+                '가져오는 저장소가 맞는지 확인하고 내 연수용 팀을 고릅니다.',
+                '이번 실습처럼 저장소 첫 화면에 <b>index.html</b>이 있는 경우, <b>프리셋은 Other</b>, <b>루트 디렉터리는 ./</b>로 둡니다.',
+                '<b>빌드 및 출력 설정</b>에서 빌드 명령은 비워 둡니다. 출력 경로를 직접 지정해야 하면, 이 예시처럼 파일이 최상위에 있을 때 <b>.</b>을 입력합니다.',
+                '<b>배포(Deploy)</b>를 누릅니다. 완료 화면에서 <b>방문하다(Visit)</b>로 실제 주소를 열고, 시크릿 창에서도 게임이 열리는지 확인합니다.'
+            ])}
+        </details>
+        <details id="deploy-not-found"><summary>‘운영 환경에 배포됨’인데 404가 떠요</summary>
+            ${connectionPhoto('deploy-404', 'Vercel은 배포 완료를 표시하지만 미리보기에서 This page doesn’t exist가 뜬 화면')}
+            ${steps([
+                '먼저 <b>Visit</b>으로 실제 주소를 엽니다. 그 주소에서도 404가 뜨면 GitHub 저장소 첫 화면을 엽니다.',
+                '파일 이름이 정확히 <b>index.html</b>이고, 폴더 안에 들어 있지 않은지 확인합니다. 사진에 나온 <b>index (2).html</b>처럼 이름이 다르면 GitHub 저장 단계의 3번대로 고칩니다.',
+                '파일이 맞다면 Vercel 프로젝트의 <b>Settings → Build and Deployment</b>에서 <b>Root Directory</b>와 <b>Output Directory</b>가 게임 파일 위치와 일치하는지 확인합니다.',
+                '파일을 고쳤다면 Vercel <b>Deployments</b>에서 수정한 내용으로 새 배포가 생겼는지 확인합니다. 설정만 고쳤다면 <b>Redeploy(재배포)</b>를 누릅니다. 완료 후 실제 주소를 다시 열어 확인합니다.'
+            ])}
+            <p>계속 404가 뜨면 <b>GitHub 파일 목록, Vercel 배포 상태, 실제 주소에서 뜨는 오류 문구</b>를 함께 보여주세요.</p>
+        </details>
+        ${ok('다른 기기 또는 시크릿 창에서 게임이 열리고 끝까지 실행됩니다.')}`;
+}
+
+function openWorkshopHelp(group, detailId) {
+    go(pages.findIndex(page => page[0] === group));
+    const detail = document.getElementById(detailId);
+    if (detail) {
+        detail.open = true;
+        detail.querySelector('summary').focus({ preventScroll: true });
+        detail.scrollIntoView({ block: 'start' });
+    }
+}
+
 const connectionPages = [
     ['GitHub 연결', 'GitHub 계정으로 로그인하기', '함께 따라 하기 · 1', () => `
         <p class="lead">GitHub에 먼저 로그인해 두면 연결 화면에서 같은 계정인지 확인하기 쉽습니다.</p>
@@ -351,10 +430,10 @@ const pages=[
 ['프로그램 1','우주선 레이스를 만듭니다','실습 · 20분',()=>`<p class="lead">내 교과 탭을 고르고, 완성된 프롬프트를 ChatGPT 새 채팅에 붙여넣으세요.</p>${steps(['아래에서 <b>내 교과 탭</b>을 선택합니다.','<b>요청문 전체 복사</b>를 누른 뒤 ChatGPT 새 채팅에 붙여넣고 전송합니다.','미리보기 또는 만들어진 index.html을 열어 직접 한 판 해 봅니다.','ChatGPT가 제시한 문항·정답·해설을 검토합니다.'])}<button class="primary" onclick="startDemo()">점프! 태양계 탐험대 먼저 체험하기 →</button>${raceWorkshop()}<p>다른 단원으로 바꾸려면 붙여넣은 프롬프트의 <b>[문제로 낼 개념]</b>과 첫 줄의 학년·단원 이름을 수정하세요.</p><div class="callout">오늘 만드는 것은 <b>내 화면에서 혼자 하는 레이스</b>입니다. 정답을 맞히면 전진합니다. 실시간 학생 순위·모둠방·아이템 공격은 이번 실습에 넣지 않습니다.</div>${ok('학습 화면과 레이스가 실제로 실행됩니다.')}${tip('코드 글자만 나왔어요','“코드 설명 대신 실행할 수 있는 index.html 파일로 제공해 주세요. 가능한 환경이면 미리보기를 열어 주세요.”라고 요청하세요. 파일만 받았다면 내려받아 브라우저로 열 수 있습니다.')}`],
 ['프로그램 1','클릭해 보며, 다섯 가지만 확인합니다','실행 확인 · 5분',()=>`<div class="grid"><div class="card"><span class="num">CHECK 01</span><h3>학습 → 출발</h3><p>개념 카드가 보이고 시작 버튼으로 이동하나요?</p></div><div class="card"><span class="num">CHECK 02</span><h3>정답 → 전진</h3><p>한 문항을 맞힐 때 한 번만 이동하고, 연속 두 문항을 맞히면 부스터가 켜지나요?</p></div><div class="card"><span class="num">CHECK 03</span><h3>오답 → 다시 도전</h3><p>해설이 나오고 같은 문제를 다시 풀 수 있나요?</p></div></div>${steps(['다섯 문제를 끝까지 풉니다. 한 번은 일부러 틀려 보세요.','결과 화면에서 <b>첫 시도 정답 수</b>가 맞는지 확인합니다.','다시 하기를 누르면 <b>진행도와 점수가 0으로 초기화</b>되는지 확인합니다.'])}<div class="callout"><b>내용 확인도 교사의 역할입니다.</b> 정답이 하나인지, 해설이 정확한지, 그림이 실제 크기·거리 비율이라는 오해를 주지 않는지 확인하세요.</div>${ok('정답·오답·결과·재시작을 직접 확인했습니다. 문제가 있으면 도움 단계의 요청문을 사용합니다.')}`],
 ['프로그램 1','한 번에 하나씩, 말로 고칩니다','수정 · 10분',()=>`<p class="lead">“더 좋게 해 줘”보다, 바꿀 대상과 원하는 모습을 정확히 말하면 쉽습니다.</p>${prompt('revisePrompt','② 읽기와 동작을 다듬는 요청문')}${prompt('customPrompt','③ 다른 단원으로 바꾸는 요청문')}<div class="callout">오늘은 먼저 <b>제목·색상·문제 중 하나만</b> 바꿔보세요. 다른 단원으로 바꿀 때는 대괄호 [ ] 안을 채우고, 문항을 검토한 후 반영합니다.</div>${ok('내가 요청한 수정이 화면에 반영되었습니다.')}`],
-['저장하기','게임 파일을 GitHub에 보관합니다','저장 · 8분',()=>`<p class="lead">파일을 보관하는 단계입니다. 아직 학생 접속 주소를 만든 것은 아닙니다.</p>${prompt('savePrompt','④ GitHub 저장 요청문')}${steps(['위 요청문을 게임을 만들던 대화에 입력합니다.','새 저장소 이름과 계정을 확인합니다. 기존 자료를 덮어쓰는 작업이 아닌지 확인합니다.','완료 후 받은 <b>실제 GitHub 저장소 주소</b>를 열어 index.html이 있는지 확인합니다.'])}${tip('직접 올려야 한다면 — 쉬운 대체 경로',`① 게임의 index.html을 내려받습니다.<br>② ${link('https://github.com/new','GitHub 새 저장소')}를 열어 이름을 입력하고 Private를 선택한 뒤 Create repository를 누릅니다.<br>③ 빈 저장소의 ‘uploading an existing file’ 또는 Add file → Upload files를 선택합니다.<br>④ index.html을 끌어다 놓고 Commit changes로 저장합니다.<br>⑤ 목록에 index.html이 보이는지 확인합니다. 버튼 이름은 화면에 따라 다를 수 있습니다.`)}${ok('GitHub 저장소 안에 index.html 파일이 보입니다.')}`],
-['공유하기','Vercel로 접속 주소를 만듭니다','배포 · 12분',()=>`${prompt('deployPrompt','⑤ Vercel 배포 요청문')}${steps(['게임을 만들던 대화에 위 요청문을 입력합니다.','배포할 저장소와 Vercel 계정·팀을 확인합니다.','실제 배포 완료 후 나온 주소를 엽니다.','브라우저 <b>시크릿 창</b>에서도 열어 학생이 로그인 없이 볼 수 있는지 확인합니다.'])}${tip('직접 배포해야 한다면 — Vercel에서 진행',`① ${link('https://vercel.com/new','Vercel 새 프로젝트')}를 엽니다.<br>② GitHub의 science-race-workshop 저장소를 찾아 Import합니다. 목록에 없다면 GitHub 접근 권한에서 해당 저장소를 허용합니다.<br>③ index.html만 있는 정적 사이트라면 Framework Preset은 Other, Root Directory는 파일이 있는 위치를 사용합니다. Build Command는 비우고 Output Directory는 파일이 있는 디렉터리(루트에 있으면 .)로 설정합니다.<br>④ 설정을 확인하고 Deploy를 누릅니다.<br>⑤ 완료 화면에서 실제 주소를 엽니다. 설정 항목과 기본값은 화면에 따라 달라질 수 있으므로 오류가 나면 화면과 오류 문구를 GPT에 전달하세요.`)}<div class="callout"><b>주소가 생겼어도 확인은 한 번 더.</b> 다른 선생님의 기기에서 열어 보세요. 로그인 화면이 나오면 접근 제한 설정을 확인해야 합니다. 학생에게 공유할 때 이름·점수 같은 개인정보를 수집하지 않습니다.</div>${ok('다른 기기 또는 시크릿 창에서 게임이 열리고 끝까지 실행됩니다.')}`],
+['저장하기','게임 파일을 GitHub에 보관합니다','저장 · 8분',githubSaveGuide],
+['공유하기','Vercel로 접속 주소를 만듭니다','배포 · 12분',vercelDeployGuide],
 ['마무리','수업에 넣을 장면을 정합니다','나눔 · 5분',()=>`<h1>이제, 내 수업의 도구입니다.</h1><p class="lead">완성도보다 중요한 것은 학생이 무엇을 배우고, 교사가 무엇을 확인할 수 있는지입니다.</p>${steps(['옆 선생님에게 게임 주소를 공유하고 서로 한 번 실행합니다.','“어떤 단원의 어느 장면에서 쓸 것인가?”를 한 문장으로 설명합니다.','“게임 결과를 보고 무엇을 다시 가르칠 것인가?”를 정합니다.'])}<div class="grid"><div class="card"><h3>수업 전</h3><p>선수 개념을 확인하는 짧은 진단</p></div><div class="card"><h3>수업 중</h3><p>개념 학습 뒤 즉시 확인하는 연습</p></div><div class="card"><h3>수업 후</h3><p>틀린 문제를 다시 설명하는 복습</p></div></div><div class="callout">다음 작품도 같은 순서입니다.<br><b>배울 내용 정하기 → 구체적으로 부탁하기 → 실행하기 → 교사가 검토하기 → 고치기 → 공유하기</b></div><button onclick="downloadPrompts()">실습 요청문 모음 내려받기</button>`],
-['도움','막혔을 때는 이곳으로 오세요','언제든 사용',()=>`<p class="lead">버튼을 여러 번 누르기보다, 지금 화면과 하고 싶은 행동을 함께 알려주세요.</p>${prompt('helpPrompt','문제가 생겼을 때 복사하는 요청문')}${tip('GitHub가 검색되지 않아요','설정의 검색창과 새 도구 목록의 검색창은 다릅니다. ‘디렉터리 둘러보기’ 또는 도구 목록 바로가기로 이동한 뒤 검색하세요.')}${tip('저장 또는 배포가 완료됐다고 하는데 주소가 없어요','실제 저장소 주소·파일 목록·배포 완료 상태를 요청하세요. 주소를 추측해서 쓰지 마세요. 도구가 지원하지 않는다면 저장·배포 단계의 직접 진행 경로를 사용합니다.')}${tip('화면이 안내와 달라요','이 자료는 제공된 ChatGPT Work 화면을 바탕으로 합니다. 일반 ChatGPT·조직 계정·업데이트에 따라 다를 수 있습니다. 현재 화면을 캡처해 강사에게 보여주세요. 비밀번호·인증번호·토큰은 가리세요.')}${tip('시간 안에 배포까지 못 했어요','게임 파일을 먼저 내려받아 보관하고, 저장·배포 단계는 연수 후 이어서 진행하세요. 강사는 참가자가 만든 파일이 실제 실행되는지 먼저 확인합니다.')}<p>${link('https://chatgpt.com/plugins','도구 목록 열기')} · ${link('https://github.com/','GitHub 열기')} · ${link('https://vercel.com/','Vercel 열기')}</p><p class="caption">화면 안내 기준: 2026년 11월 제공된 화면. 재구성 화면은 실제 로그인 버튼이 아닙니다. 도구의 지원 범위는 계정과 실행 환경에서 확인해야 합니다.</p>`]
+['도움','막혔을 때는 이곳으로 오세요','언제든 사용',()=>`<p class="lead">버튼을 여러 번 누르기보다, 지금 화면과 하고 싶은 행동을 함께 알려주세요.</p><div class="callout"><b>내 화면과 같은 상황을 고르세요.</b><p><button type="button" onclick="openWorkshopHelp('저장하기', 'github-file-name')">파일에 (2)가 붙었어요</button> <button type="button" onclick="openWorkshopHelp('공유하기', 'repo-not-listed')">Vercel에 저장소가 없어요</button> <button type="button" onclick="openWorkshopHelp('공유하기', 'deploy-not-found')">배포 완료인데 404가 떠요</button></p></div>${prompt('helpPrompt','문제가 생겼을 때 복사하는 요청문')}${tip('GitHub가 검색되지 않아요','설정의 검색창과 새 도구 목록의 검색창은 다릅니다. ‘디렉터리 둘러보기’ 또는 도구 목록 바로가기로 이동한 뒤 검색하세요.')}${tip('저장 또는 배포가 완료됐다고 하는데 주소가 없어요','실제 저장소 주소·파일 목록·배포 완료 상태를 요청하세요. 주소를 추측해서 쓰지 마세요. 도구가 지원하지 않는다면 저장·배포 단계의 직접 진행 경로를 사용합니다.')}${tip('화면이 안내와 달라요','이 자료는 제공된 ChatGPT Work 화면을 바탕으로 합니다. 일반 ChatGPT·조직 계정·업데이트에 따라 다를 수 있습니다. 현재 화면을 캡처해 강사에게 보여주세요. 비밀번호·인증번호·토큰은 가리세요.')}${tip('시간 안에 배포까지 못 했어요','게임 파일을 먼저 내려받아 보관하고, 저장·배포 단계는 연수 후 이어서 진행하세요. 강사는 참가자가 만든 파일이 실제 실행되는지 먼저 확인합니다.')}<p>${link('https://chatgpt.com/plugins','도구 목록 열기')} · ${link('https://github.com/','GitHub 열기')} · ${link('https://vercel.com/','Vercel 열기')}</p><p class="caption">화면 안내 기준: 2026년 11월 제공된 화면. 재구성 화면은 실제 로그인 버튼이 아닙니다. 도구의 지원 범위는 계정과 실행 환경에서 확인해야 합니다.</p>`]
 ];
 const rallyPrompt=`당신은 중학교 과학 교사와 함께 수업용 게임을 만드는 개발자입니다. 저는 코딩을 모릅니다. 프로그램 1은 유지하고 별도 폴더 또는 별도 파일에 프로그램 2를 만들어 주세요. 기존 파일을 덮어쓰지 마세요.
 
